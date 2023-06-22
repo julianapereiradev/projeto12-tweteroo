@@ -13,6 +13,7 @@ let _username = "";
 app.post("/sign-up", (req, res) => {
   const user = req.body;
   _avatar = user.avatar;
+  _username = user.username;
   users.push(user);
   res.send("OK");
 });
@@ -20,20 +21,18 @@ app.post("/sign-up", (req, res) => {
 console.log("users aqui:", users);
 
 app.get("/tweets", (req, res) => {
-
-    if(tweets.length <= 10) {
+  if (tweets.length <= 10) {
     res.send(tweets);
-    } else {
-        res.send(tweets.slice(-10));
-    }   
+  } else {
+    res.send(tweets.slice(-10));
+  }
 });
 
 app.post("/tweets", (req, res) => {
   const tweet = req.body;
-  _username = tweet.username;
 
   if (_username === undefined || _username === "") {
-    res.send("UNAUTHORIZED");
+    res.status(401).send("UNAUTHORIZED");
   } else {
     let tweetWithAvatar = { ...tweet, avatar: _avatar };
     tweets.push(tweetWithAvatar);
