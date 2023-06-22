@@ -20,7 +20,10 @@ app.post("/sign-up", (req, res) => {
 console.log("users aqui:", users);
 
 app.get("/tweets", (req, res) => {
-  res.send(tweets);
+
+    // for(let i = tweets.length; i >= tweets.length - 10; i--) {
+    // }
+    res.send(tweets);
 });
 
 app.post("/tweets", (req, res) => {
@@ -28,7 +31,7 @@ app.post("/tweets", (req, res) => {
   _username = tweet.username;
 
   if (_username === undefined || _username === "") {
-    console.log("UNAUTHORIZED");
+    res.send("UNAUTHORIZED");
   } else {
     let tweetWithAvatar = { ...tweet, avatar: _avatar };
     tweets.push(tweetWithAvatar);
