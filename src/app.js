@@ -21,9 +21,11 @@ console.log("users aqui:", users);
 
 app.get("/tweets", (req, res) => {
 
-    // for(let i = tweets.length; i >= tweets.length - 10; i--) {
-    // }
+    if(tweets.length <= 10) {
     res.send(tweets);
+    } else {
+        res.send(tweets.slice(-10));
+    }   
 });
 
 app.post("/tweets", (req, res) => {
