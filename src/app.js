@@ -31,7 +31,7 @@ app.post("/sign-up", (req, res) => {
   }
 
   users.push(globalUser);
-  res.status(201).send("OK");
+  res.send("OK");
   // console.log('globalUser aqui:', globalUser)
 });
 
@@ -41,21 +41,18 @@ app.post("/tweets", (req, res) => {
 
   const {username, tweet} = req.body
 
-  if (globalUser.username === undefined || globalUser.username === "") {
-    return res.status(401).send("UNAUTHORIZED");
-  }
-  if ( !username || !tweet || tweet === "" ||typeof(username) !== "string" || typeof(avatar) !== "string") {
-    return res.status(400).send("Todos os campos são obrigatórios!")
-  }
-
   globalTweet = {
     username: username,
     tweet: tweet,
     avatar: globalUser.avatar
   }
 
+  if (globalUser.username === undefined || globalUser.username === "") {
+    res.status(401).send("UNAUTHORIZED");
+  } else {
     tweets.push(globalTweet);
-    res.status(201).send("OK");
+    res.send("OK");
+  }
 });
 
 app.get("/tweets", (req, res) => {
