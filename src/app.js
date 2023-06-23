@@ -47,12 +47,15 @@ app.post("/tweets", (req, res) => {
     avatar: globalUser.avatar
   }
 
+  if ( !tweet || typeof(tweet) !== "string" || tweet === "") {
+    return res.status(400).send("Todos os campos são obrigatórios!")
+  }
   if (globalUser.username === undefined || globalUser.username === "") {
-    res.status(401).send("UNAUTHORIZED");
-  } else {
+    return res.status(401).send("UNAUTHORIZED");
+  } 
+
     tweets.push(globalTweet);
     res.status(201).send("OK");
-  }
 });
 
 app.get("/tweets", (req, res) => {
