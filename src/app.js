@@ -43,7 +43,7 @@ app.post("/tweets", (req, res) => {
     avatar: globalUser.avatar
   }
 
-  if (username === undefined || username === "") {
+  if (globalUser.username === undefined || globalUser.username === "") {
     res.status(401).send("UNAUTHORIZED");
   } else {
     tweets.push(globalTweet);
