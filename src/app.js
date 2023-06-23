@@ -31,7 +31,7 @@ app.post("/sign-up", (req, res) => {
   }
 
   users.push(globalUser);
-  res.send("OK");
+  res.status(201).send("OK");
   // console.log('globalUser aqui:', globalUser)
 });
 
@@ -51,7 +51,7 @@ app.post("/tweets", (req, res) => {
     res.status(401).send("UNAUTHORIZED");
   } else {
     tweets.push(globalTweet);
-    res.send("OK");
+    res.status(201).send("OK");
   }
 });
 
