@@ -7,36 +7,55 @@ app.use(express.json());
 
 const users = [];
 const tweets = [];
-let _avatar = "";
-let _username = "";
+
+let globalUser = {
+  username: "",
+  avatar: ""
+}
+
+let globalTweet = {
+  username: "",
+  tweet: ""
+}
 
 app.post("/sign-up", (req, res) => {
-  const user = req.body;
-  _avatar = user.avatar;
-  _username = user.username;
-  users.push(user);
+  const {username, avatar} = req.body
+
+  globalUser = {
+    username: username,
+    avatar: avatar,
+  }
+
+  users.push(globalUser);
   res.send("OK");
+  // console.log('globalUser aqui:', globalUser)
 });
 
-console.log("users aqui:", users);
+
+
+app.post("/tweets", (req, res) => {
+
+  const {username, tweet} = req.body
+
+  globalTweet = {
+    username: username,
+    tweet: tweet,
+    avatar: globalUser.avatar
+  }
+
+  if (username === undefined || username === "") {
+    res.status(401).send("UNAUTHORIZED");
+  } else {
+    tweets.push(globalTweet);
+    res.send("OK");
+  }
+});
 
 app.get("/tweets", (req, res) => {
   if (tweets.length <= 10) {
     res.send(tweets);
   } else {
     res.send(tweets.slice(-10));
-  }
-});
-
-app.post("/tweets", (req, res) => {
-  const tweet = req.body;
-
-  if (_username === undefined || _username === "") {
-    res.status(401).send("UNAUTHORIZED");
-  } else {
-    let tweetWithAvatar = { ...tweet, avatar: _avatar };
-    tweets.push(tweetWithAvatar);
-    res.send("OK");
   }
 });
 
