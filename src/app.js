@@ -8,6 +8,7 @@ app.use(express.json());
 const users = [];
 const tweets = [];
 
+
 let globalUser = {
   username: "",
   avatar: ""
@@ -17,6 +18,7 @@ let globalTweet = {
   username: "",
   tweet: ""
 }
+
 
 app.post("/sign-up", (req, res) => {
   const {username, avatar} = req.body
@@ -32,9 +34,7 @@ app.post("/sign-up", (req, res) => {
 
   users.push(globalUser);
   res.status(201).send("OK");
-  // console.log('globalUser aqui:', globalUser)
 });
-
 
 
 app.post("/tweets", (req, res) => {
@@ -58,6 +58,7 @@ app.post("/tweets", (req, res) => {
     res.status(201).send("OK");
 });
 
+
 app.get("/tweets", (req, res) => {
   if (tweets.length <= 10) {
     res.send(tweets);
@@ -65,6 +66,23 @@ app.get("/tweets", (req, res) => {
     res.send(tweets.slice(-10));
   }
 });
+
+
+app.get("/tweets/:USERNAME", (req, res) => {
+  
+  const {USERNAME} = req.params
+
+  const tweetsUsername = tweets.filter((item) => item.username === USERNAME);
+    
+    if(tweetsUsername.length !== 0) {
+     
+      res.send(tweetsUsername);
+      
+    } else {
+      res.send(tweetsUsername)
+    }
+});
+
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Servidor está rodando na porta ${PORT}`));
