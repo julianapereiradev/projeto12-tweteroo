@@ -21,6 +21,10 @@ let globalTweet = {
 app.post("/sign-up", (req, res) => {
   const {username, avatar} = req.body
 
+  if ( !username || !avatar || typeof(username) !== "string" || typeof(avatar) !== "string") {
+    return res.status(400).send("Todos os campos são obrigatórios!")
+  }
+
   globalUser = {
     username: username,
     avatar: avatar,
