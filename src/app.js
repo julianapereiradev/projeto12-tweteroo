@@ -20,6 +20,13 @@ let globalTweet = {
 }
 
 
+function obterElementosPorPagina(pagina) {
+  const indiceInicial = (pagina - 1) * 10;
+  const indiceFinal = indiceInicial + 10;
+
+  return tweets.slice(indiceInicial, indiceFinal);
+}
+
 app.post("/sign-up", (req, res) => {
   const {username, avatar} = req.body
 
@@ -60,11 +67,26 @@ app.post("/tweets", (req, res) => {
 
 
 app.get("/tweets", (req, res) => {
-  if (tweets.length <= 10) {
-    res.send(tweets);
+
+  const {page} = req.query
+  
+if(page) {
+
+  if(page === "0" || page === 0) {
+    return res.status(400).send("Informe uma página válida!")
   } else {
-    res.send(tweets.slice(-10));
+    const elementosPagina = obterElementosPorPagina(page);
+    res.send(elementosPagina)
+    return
   }
+}
+
+if (tweets.length <= 10) {
+  return res.send(tweets);
+} 
+
+  res.send(tweets.slice(-10));
+
 });
 
 
