@@ -68,11 +68,12 @@ app.post("/tweets", (req, res) => {
 
 app.get("/tweets", (req, res) => {
 
-  const {page} = req.query
+  let page = Number(req.query.page)
+
   
 if(page) {
 
-  if(page === "0" || page === 0) {
+  if(page === 0 || page === undefined || typeof page !== "number" || page < 1) {
     return res.status(400).send("Informe uma página válida!")
   } else {
     const elementosPagina = obterElementosPorPagina(page);
