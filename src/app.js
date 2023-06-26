@@ -51,6 +51,8 @@ app.post("/tweets", (req, res) => {
   // console.log(JSON.stringify(req.headers.user));
   const { user } = req.headers;
 
+  const userExists = users.find(u => u.username === user);
+
   globalTweet = {
     username: user,
     tweet: tweet,
@@ -60,7 +62,8 @@ app.post("/tweets", (req, res) => {
   if (!tweet || typeof tweet !== "string" || tweet === "") {
     return res.status(400).send("Todos os campos são obrigatórios!");
   }
-  if (!user || user === undefined || user === "") {
+  
+  if (!userExists || user === undefined || user === "") {
     return res.status(401).send("UNAUTHORIZED");
   }
 
