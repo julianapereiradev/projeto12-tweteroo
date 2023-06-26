@@ -5,6 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Global Variables:
+
 const users = [];
 const tweets = [];
 
@@ -18,12 +20,19 @@ let globalTweet = {
   tweet: "",
 };
 
-function obterElementosPorPagina(pagina) {
-  const indiceInicial = (pagina - 1) * 10;
-  const indiceFinal = indiceInicial + 10;
 
-  return tweets.slice(indiceInicial, indiceFinal);
+// Function to separate elements of the array of tweets 
+// according to the page passed:
+
+function elementsPerPage(thepage) {
+  const initialIndex = (thepage - 1) * 10;
+  const finalIndex = initialIndex + 10;
+
+  return tweets.slice(initialIndex, finalIndex);
 }
+
+
+// Sign Up - POST:
 
 app.post("/sign-up", (req, res) => {
   const { username, avatar } = req.body;
@@ -46,9 +55,13 @@ app.post("/sign-up", (req, res) => {
   res.status(201).send("OK");
 });
 
+
+// Tweets - POST:
+
 app.post("/tweets", (req, res) => {
+
   const { tweet } = req.body;
-  // console.log(JSON.stringify(req.headers.user));
+
   const { user } = req.headers;
 
   const userExists = users.find(u => u.username === user);
@@ -62,7 +75,7 @@ app.post("/tweets", (req, res) => {
   if (!tweet || typeof tweet !== "string" || tweet === "") {
     return res.status(400).send("Todos os campos são obrigatórios!");
   }
-  
+
   if (!userExists || user === undefined || user === "") {
     return res.status(401).send("UNAUTHORIZED");
   }
@@ -70,6 +83,9 @@ app.post("/tweets", (req, res) => {
   tweets.push(globalTweet);
   res.status(201).send("OK");
 });
+
+
+// Tweets - GET:
 
 app.get("/tweets", (req, res) => {
   let page = Number(req.query.page);
@@ -83,8 +99,8 @@ app.get("/tweets", (req, res) => {
     ) {
       return res.status(400).send("Informe uma página válida!");
     } else {
-      const elementosPagina = obterElementosPorPagina(page);
-      res.send(elementosPagina);
+      const elementsPage = elementsPerPage(page);
+      res.send(elementsPage);
       return;
     }
   }
@@ -95,6 +111,9 @@ app.get("/tweets", (req, res) => {
 
   res.send(tweets.slice(-10));
 });
+
+
+// Tweets - GET by :USERNAME:
 
 app.get("/tweets/:USERNAME", (req, res) => {
   const { USERNAME } = req.params;
@@ -107,6 +126,9 @@ app.get("/tweets/:USERNAME", (req, res) => {
     res.send(tweetsUsername);
   }
 });
+
+
+// PORT 5000:
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Servidor está rodando na porta ${PORT}`));
