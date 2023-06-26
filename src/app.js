@@ -46,10 +46,12 @@ app.post("/sign-up", (req, res) => {
 
 app.post("/tweets", (req, res) => {
 
-  const {username, tweet} = req.body
+  const {tweet} = req.body
+  console.log(JSON.stringify(req.headers.user));
+  const {user} = req.headers
 
   globalTweet = {
-    username: username,
+    username: user,
     tweet: tweet,
     avatar: globalUser.avatar
   }
@@ -57,7 +59,7 @@ app.post("/tweets", (req, res) => {
   if ( !tweet || typeof(tweet) !== "string" || tweet === "") {
     return res.status(400).send("Todos os campos são obrigatórios!")
   }
-  if (globalUser.username === undefined || globalUser.username === "") {
+  if (user === undefined || user === "") {
     return res.status(401).send("UNAUTHORIZED");
   } 
 
